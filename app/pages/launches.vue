@@ -4,7 +4,6 @@
 		<div class="d-flex justify-space-between align-center mb-6">
 			<div class="d-flex flex-row align-center">
 				<label for="sortBy">Sort by Launch date:</label>
-				<!-- Sort Order Toggle -->
 				<button class="mx-3" variant="text" @click="sortDesc = !sortDesc">
 					{{ sortDesc ? 'Descending' : 'Ascending' }}
 				</button>
@@ -102,29 +101,25 @@ const launches = computed(
 
 // Filter
 const selectedYear = ref('')
-const sortBy = ref<'launchDate'>('launchDate') // Default sort field
-const sortDesc = ref(false) // Default sort order (ascending)
+const sortBy = ref<'launchDate'>('launchDate') 
+const sortDesc = ref(false)
 
 const filteredLaunches = computed(() => {
-	// Step 1: Filter launches by the selected year
 	let filtered = launches.value
 	if (selectedYear.value) {
 		filtered = filtered.filter((launch) => launch.launchYear === selectedYear.value)
 	}
 
-	// Step 2: Sort the filtered launches
 	return filtered.sort((a, b) => {
 		const valA = a[sortBy.value]!
 		const valB = b[sortBy.value]!
 
-		// Special case for date sorting
 		if (sortBy.value === 'launchDate') {
 			const dateA = new Date(valA).getTime()
 			const dateB = new Date(valB).getTime()
 			return sortDesc.value ? dateB - dateA : dateA - dateB
 		}
 
-		// Generic sorting for strings
 		if (valA < valB) return sortDesc.value ? 1 : -1
 		if (valA > valB) return sortDesc.value ? -1 : 1
 		return 0
